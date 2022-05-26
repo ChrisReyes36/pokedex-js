@@ -1,7 +1,13 @@
 const searchInput = document.querySelector("#poke-input");
 const searchBtn = document.querySelector(".btn-search");
 const pokeContainer = document.querySelector(".poke-container");
+const generationInput = document.querySelector("#generation-input");
+const left = document.querySelector(".left");
+const right = document.querySelector(".right");
+let generationshow = 1;
+let pokemonGeneration;
 
+// Color of pokemon
 const colors = {
     fire: "#FDDFDF",
     grass: "#DEFDE0",
@@ -23,19 +29,51 @@ const colors = {
     dark: "#97A5B4",
 };
 
-const pokeCount = {
-    1: [1, 151],
-    2: [152, 251],
-    3: [252, 386],
-    4: [387, 493],
-    5: [494, 649],
-    6: [650, 721],
-    7: [722, 809],
-    8: [810, 898],
+// Generate pokemon
+const showPokemonsGen = (gen) => {
+    const pokeCount = {
+        1: [1, 151],
+        2: [152, 251],
+        3: [252, 386],
+        4: [387, 493],
+        5: [494, 649],
+        6: [650, 721],
+        7: [722, 809],
+        8: [810, 898],
+    };
+
+    const pokemonGenDefault = [1, 151];
+    const pokemonGen = pokeCount[gen] || pokemonGenDefault;
+
+    return pokemonGen;
 };
 
+pokemonGeneration = showPokemonsGen(generationshow);
+
+// Change pokemon generation
+// right.addEventListener("click", () => {
+//     if (generationshow < 8) {
+//         generationshow++;
+//         pokemonGeneration = showPokemonsGen(generationshow);
+//         generationInput.value = `Generation ${generationshow}`;
+//         pokeContainer.innerHTML = "";
+//         initPokemon();
+//     }
+// });
+
+// left.addEventListener("click", () => {
+//     if (generationshow > 1) {
+//         generationshow--;
+//         pokemonGeneration = showPokemonsGen(generationshow);
+//         generationInput.value = `Generation ${generationshow}`;
+//         pokeContainer.innerHTML = "";
+//         initPokemon();
+//     }
+// });
+
 const initPokemon = async () => {
-    for (let i = pokeCount[1][0]; i <= pokeCount[1][1]; i++) {
+    generationInput.value = `Generation ${generationshow}`;
+    for (let i = pokemonGeneration[0]; i <= pokemonGeneration[1]; i++) {
         await getPokemon(i);
     }
 };
@@ -72,8 +110,6 @@ const createPokemonBox = (pokemon) => {
     pokeContainer.appendChild(pokeBox);
 };
 
-initPokemon();
-
 searchInput.addEventListener("input", (e) => {
     const pokeNames = document.querySelectorAll(".poke-name");
     const search = searchInput.value.toLowerCase();
@@ -93,3 +129,5 @@ searchBtn.addEventListener("click", (e) => {
     searchInput.value = "";
     searchInput.focus();
 });
+
+initPokemon();
